@@ -1,0 +1,21 @@
+import express from 'express';
+import * as authController from '../controllers/authController.js';
+import { authenticate } from '../middleware/auth.js';
+import { validate } from '../middleware/validation.js';
+import {
+  registerValidator,
+  loginValidator,
+  updateProfileValidator,
+} from '../validators/authValidator.js';
+
+const router = express.Router();
+
+// Public routes
+router.post('/register', registerValidator, validate, authController.register);
+router.post('/login', loginValidator, validate, authController.login);
+
+// Protected routes
+router.get('/me', authenticate, authController.getMe);
+router.put('/profile', authenticate, updateProfileValidator, validate, authController.updateProfile);
+
+export default router;
